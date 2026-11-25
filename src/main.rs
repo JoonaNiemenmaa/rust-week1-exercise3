@@ -14,9 +14,25 @@ fn main() {
             .read_line(&mut buf)
             .expect("Virhe luetessa komentokehotetta");
 
-        let syöte: i32 = buf.trim().parse().expect("Virhe jäsentäessä syötettä");
+        let syöte: i16 = match buf.trim().parse() {
+            Ok(num) => num,
+            Err(_) => {
+                println!("Parsing failed. Was the number too long for a 16-bit variable?");
+                continue;
+            }
+        };
 
-        count += syöte;
+        if syöte < 0 {
+            println!("The given value is lower than 0.");
+            continue;
+        }
+
+        if syöte == 0 {
+            println!("The given value is 0. Ending the program.");
+            return;
+        }
+
+        count += i32::from(syöte);
     }
     println!("Enough incrementations.");
 }
